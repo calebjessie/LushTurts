@@ -1,5 +1,5 @@
 local func = { }
-local json = require("json")
+local json = require("/apis/json")
 
 local nextMine = {
   loc = {x,y,z},

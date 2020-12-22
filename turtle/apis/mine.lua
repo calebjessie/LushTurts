@@ -1,6 +1,6 @@
 -- Load Configs
-local config = require("config")
-local tracking = require("tracking")
+local config = require("/data/config")
+local tracking = require("/apis/tracking")
 local func = { }
 
 function dropItems()

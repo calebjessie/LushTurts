@@ -1,5 +1,5 @@
 local func = { }
-local json = require("json")
+local json = require("/apis/json")
 
 local turtLoc = {
     coords = {x,y,z},
@@ -9,7 +9,7 @@ local turtLoc = {
 -- Load location from file
 function func.loadLoc()
     local usLoc
-    local tL = io.open("lushTurts/turtLoc.json", "r")
+    local tL = io.open("lushTurts/data/turtLoc.json", "r")
     local locJson = tL:read("a")
     tL:close()
 
@@ -21,7 +21,7 @@ end
 -- Persist location values
 function saveLoc()
     local turtLocJson
-    local tL = io.open("lushTurts/turtLoc.json", "w+")
+    local tL = io.open("lushTurts/data/turtLoc.json", "w+")
     turtLocJson = json.encode(turtLoc)
     tL:write(turtLocJson)
     tL:close()
