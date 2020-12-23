@@ -132,7 +132,7 @@ function riseTier()
     tracking.turtRight()
     tracking.turtRight()
     
-    for i = 1, 3, do
+    for i = 1, 3 do
         turtle.digUp()
         tracking.turtUp()
     end
@@ -154,7 +154,9 @@ function startMine()
             end
             manageInventory()
         end
-        riseTier()
+        if(tier ~= config.mineChunk.h) then
+            riseTier()
+        end
     end
 end
 

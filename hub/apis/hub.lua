@@ -29,7 +29,7 @@ end
 -- Save new coordinates to file
 function saveNewCoords()
 	local mineJson
-	local mineFile = io.open("lushTurts/nextMine.json", "w+")
+	local mineFile = io.open("/lushTurts/data/nextMine.json", "w+")
 	positioning()
 	mineJson = json.encode(nextMine)
 	mineFile:write(mineJson)
@@ -39,7 +39,7 @@ end
 -- Fetch new mining coordinates for a turtle
 function func.getNextMine()
 	local usMine  = {}
-	local mineFile = io.open("lushTurts/nextMine.json", "r")
+	local mineFile = io.open("/lushTurts/data/nextMine.json", "r")
 	local mineJson = mineFile:read("a")
 	mineFile:close()
 
@@ -56,26 +56,28 @@ function func.getNextMine()
 	return usMine.loc
 end
 
-function func.startWork(turtID)
+function func.startWork()
 	rednet.send(7, "Starting work...", "hub")
 
 	while true do
 		print("Waiting for my children to request more work...")
 		local senderID, msg, protocol = rednet.receive("mine")
 		
-		local nextMine = hub.getNextMine()
+		local nextMine = func.getNextMine()
 		print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
 	
-		rednet.send(turtID, nextMine, "mine")
+		rednet.send(senderID, nextMine, "mine")
 	end
 end
 
-function func.stopWork(turtID)
+function func.stopWork()
+	-- Under construction
 	rednet.send(7, "Stopping work...", "hub")
-	rednet.send(turtID, "stop", "mine")
+	rednet.send(senderID, "stop", "mine")
 end
 
 function func.getStatus()
+	-- Under construction
 	rednet.send(7, "Sending status...", "hub")
 	
 end

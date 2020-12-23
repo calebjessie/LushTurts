@@ -11,10 +11,10 @@ while true do
 
     if(protocol == "pStart") then
         print("You got it boss. Sending out the turts.")
-        hub.startWork(senderID)
+        hub.startWork()
     elseif(protocol == "pStop") then
         print("Whatever you say bud. Stopping all turt action.")
-        hub.stopWork(senderID)
+        hub.stopWork()
     elseif(protocol == "pStatus") then
         print("Here's the sitrep.")
         hub.getStatus()
