@@ -1,14 +1,24 @@
 os.setComputerLabel("Hub")
-local hub = require("hub")
+local hub = require("/apis/hub")
 
 rednet.open("top")
 
+-- Add in host so we can use lookup on "hub" to dynamically grab the hub computer ID rather than manually entering
+
 while true do
-    print("Waiting for my children to request more work...")
-    local senderID, msg, protocol = rednet.receive("mine")
+    print("Waiting for orders...")
+    local senderID, msg, protocol = rednet.receive()
 
-    local nextMine = hub.getNextMine()
-    print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
-
-    rednet.send(senderID, nextMine, "mine")
+    if(protocol == "pStart") then
+        print("You got it boss. Sending out the turts.")
+        hub.startWork(senderID)
+    elseif(protocol == "pStop") then
+        print("Whatever you say bud. Stopping all turt action.")
+        hub.stopWork(senderID)
+    elseif(protocol == "pStatus") then
+        print("Here's the sitrep.")
+        hub.getStatus()
+    else
+        print("Unkown protocol: "..protocol)
+    end
 end

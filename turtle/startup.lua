@@ -1,6 +1,6 @@
 local turtName = os.getComputerLabel()
-local mine = require("/apis/mine")
-local tracking = require("/apis/tracking")
+local mine = require("apis/mine")
+local tracking = require("apis/tracking")
 
 rednet.open("left")
 
@@ -13,9 +13,12 @@ while true do
 
     local senderID, msg, protocol = rednet.receive("mine")
     print("Message received father...")
-    print("Moving to the next chunk at x: "..msg.x..", y: "..msg.y..", z: "..msg.z)
 
-    rednet.close("left")
-    mine.moveToChunk(msg)
-    rednet.open("left")
+    if(msg == "stop") then
+        print("Stopping all work")
+        break
+    else
+        print("Moving to the next chunk at x: "..msg.x..", y: "..msg.y..", z: "..msg.z)
+        mine.moveToChunk(msg)
+    end
 end
