@@ -1,5 +1,5 @@
 os.setComputerLabel("Hub")
-local hub = require("/apis/hub")
+local hub = require("/lushTurts/apis/hub")
 
 rednet.open("top")
 

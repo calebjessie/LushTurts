@@ -1,5 +1,5 @@
 local func = { }
-local json = require("apis/json")
+local json = require("/lushTurts/apis/json")
 
 local nextMine = {
 	loc = {x,y,z},

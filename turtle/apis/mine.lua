@@ -1,6 +1,6 @@
 -- Load Configs
-local config = require("/data/config")
-local tracking = require("/apis/tracking")
+local config = require("/lushTurts/data/config")
+local tracking = require("/lushTurts/apis/tracking")
 local func = { }
 
 function dropItems()
@@ -132,7 +132,7 @@ function riseTier()
     tracking.turtRight()
     tracking.turtRight()
     
-    for _, 3, do
+    for i = 1, 3, do
         turtle.digUp()
         tracking.turtUp()
     end

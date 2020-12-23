@@ -1,6 +1,6 @@
 local turtName = os.getComputerLabel()
-local mine = require("apis/mine")
-local tracking = require("apis/tracking")
+local mine = require("/lushTurts/apis/mine")
+local tracking = require("/lushTurts/apis/tracking")
 
 rednet.open("left")
 
