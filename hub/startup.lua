@@ -12,7 +12,7 @@ while true do
     if(protocol == "pStart") then
         print("You got it boss. Starting up the job.")
         hub.startWork()
-    elseif(protocol == "dns")
+    elseif(protocol == "dns") then
         print("A device pinged me ^_^")
     else
         print("Unknown protocol: "..protocol.." Message: "..msg)
