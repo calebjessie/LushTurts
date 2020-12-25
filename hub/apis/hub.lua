@@ -112,7 +112,7 @@ function func.startWork()
 			print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
 		
 			rednet.send(senderID, nextMine, "mine")
-		elseif(msg == "reg") then
+		elseif(protocol == "reg") then
 			print(msg.label.." is now registered.")
         	hub.registerTurt(msg)
 		else
