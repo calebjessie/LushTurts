@@ -104,7 +104,7 @@ function func.startWork()
 	startTurts("start", "resumeMine")
 
 	while workStatus do
-		print("Waiting for my children to request more work...")
+		print("Waiting for orders or new Turtles to register or request work.")
 		local senderID, msg, protocol = rednet.receive("mine")
 
 		if(workStatus) then
@@ -112,6 +112,9 @@ function func.startWork()
 			print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
 		
 			rednet.send(senderID, nextMine, "mine")
+		elseif(msg == "reg") then
+			print(msg.label.." is now registered.")
+        	hub.registerTurt(msg)
 		else
 			break
 		end

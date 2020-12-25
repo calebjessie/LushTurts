@@ -6,7 +6,7 @@ rednet.open("top")
 rednet.host("hub", label)
 
 while true do
-    print("Waiting for orders or new Turtles to register or request work.")
+    print("Waiting for orders from the homie...")
     local senderID, msg, protocol = rednet.receive()
 
     if(protocol == "pStart") then
@@ -16,11 +16,8 @@ while true do
         print("Whatever you say bud. Stopping all turt action.")
         hub.stopWork()
     elseif(protocol == "pStatus") then
-        print("Here's the sitrep.")
+        print("Here's the sitrep:")
         hub.getStatus()
-    elseif(protocol == "reg") then
-        print(msg.label.." is now registered.")
-        hub.registerTurt(msg)
     else
         print("Unkown protocol: "..protocol)
     end
