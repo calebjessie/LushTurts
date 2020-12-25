@@ -10,7 +10,7 @@ while true do
     local senderID, msg, protocol = rednet.receive()
 
     if(protocol == "pStart") then
-        print("You got it boss. Sending out the turts.")
+        print("You got it boss. Starting up the job.")
         hub.startWork()
     elseif(protocol == "pStop") then
         print("Whatever you say bud. Stopping all turt action.")

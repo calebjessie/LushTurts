@@ -10,14 +10,14 @@ rednet.open("left")
 local hubID = rednet.lookup("hub", "Hub")
 
 -- Register turtle with the hub
-rednet.send(hubID, turtle, "reg")
+rednet.send(hubID, turtle, "mine")
 
 -- Get initial location of turtle
 tracking.initCoords()
 
 -- Send request for new chunk to mine. If msg is stop, then we wait for hub to resume work
 while true do
-    rednet.send(9, "work", "mine")
+    rednet.send(hubID, "work", "mine")
 
     local senderID, msg, protocol = rednet.receive("mine")
     print("Message received father...")
