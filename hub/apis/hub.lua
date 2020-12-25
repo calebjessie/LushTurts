@@ -109,7 +109,7 @@ function func.startWork()
 
 		if(msg.status) then
 			print(msg.label.." is now registered.")
-        	hub.registerTurt(msg)
+        	func.registerTurt(msg)
 		elseif(workStatus and (msg == "work")) then
 			local nextMine = func.getNextMine()
 			print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
