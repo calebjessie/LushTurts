@@ -10,7 +10,7 @@ function start()
 end
 
 function stop()
-    rednet.send(hub, "stop", "pStop")
+    rednet.send(hub, "stop", "mine")
     local id, msg, protocol = rednet.receive("hub")
     print(msg)
 end
@@ -21,11 +21,11 @@ function status()
     print("Need to figure out how to display turtle stats")
 end
 
-if arg == "start" then
+if(arg == "start") then
     start()
-elseif arg == "stop" then
+elseif(arg == "stop") then
     stop()
-elseif arg == "status" then
+elseif(arg == "status") then
     status()
 else
     print("Usage: lushturts [-start] | [-stop] | [-status]")

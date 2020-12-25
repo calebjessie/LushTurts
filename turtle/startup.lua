@@ -26,6 +26,7 @@ while true do
         print("Moving to the next chunk at x: "..msg.x..", y: "..msg.y..", z: "..msg.z)
         mine.moveToChunk(msg)
     else
+        print("Waiting for order to resume working.")
         local senderID, msg, protocol = rednet.receive("resumeMine")
         os.sleep(1)
     end

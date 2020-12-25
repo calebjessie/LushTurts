@@ -37,7 +37,7 @@ function saveNewCoords()
 end
 
 -- Fetch new mining coordinates for a turtle
-function func.getNextMine()
+function getNextMine()
 	local usMine = {}
 	local mineFile = io.open("/lushTurts/data/nextMine.json", "r")
 	local mineJson = mineFile:read("a")
@@ -98,12 +98,11 @@ function startTurts(msg, protocol)
 end
 
 function func.startWork()
-	workStatus = true
 	rednet.send(7, "Starting work...", "hub")
 
 	startTurts("start", "resumeMine")
 
-	while workStatus do
+	while true do
 		print("Waiting for orders, new Turtles to register or request work.")
 		local senderID, msg, protocol = rednet.receive("mine")
 
@@ -111,47 +110,48 @@ function func.startWork()
 			print(msg.label.." is now registered.")
         	func.registerTurt(msg)
 		elseif(workStatus and (msg == "work")) then
-			local nextMine = func.getNextMine()
+			local nextMine = getNextMine()
 			print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
-		
 			rednet.send(senderID, nextMine, "mine")
-		else
+		elseif(msg == "status") then
+			print("Here's the sitrep:")
+			getStatus()
+		elseif(msg == "stop") then
+			print("Whatever you say bud. Stopping all turt action.")
+			stopWork()
 			break
+		else
+			print("Not sure what this is from "..senderID.."... Message: "..msg)
+			print("Just gonna wait for another message...")
 		end
 	end
 end
 
-function func.stopWork()
-	workStatus = false
+function stopWork()
 	rednet.send(7, "Stopping work...", "hub")
 
 	while true do
+		local turtsDone = 0
 		local senderID, msg, protocol = rednet.receive("mine")
+		rednet.send(senderID, "stop", "mine")
 
-		if(workStatus) then
-			break
-		else 
-			local turtsDone = 0
-			rednet.send(senderID, "stop", "mine")
+		local turtles = func.getTurtles()
+		turtles.senderID.status = "stopped"
+		func.saveTurtles(turtles)
 
-			local turtles = func.getTurtles()
-			turtles.senderID.status = "stopped"
-			func.saveTurtles(turtles)
-
-			for _, turt in turtles do
-				if(turt.status == "stopped") then
-					turtsDone = turtsDone + 1
-					
-					if(turtsDone == #turtles) then
-						break
-					end
-				end
+		for key, turt in pairs(turtles) do
+			if(turt.status == "stopped") then
+				turtsDone = turtsDone + 1
 			end
+		end
+
+		if(turtsDone == #turtles) then
+			break
 		end
 	end
 end
 
-function func.getStatus()
+function getStatus()
 	-- Under construction
 	rednet.send(7, "Sending status...", "hub")
 	

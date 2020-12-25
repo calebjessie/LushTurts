@@ -12,15 +12,7 @@ while true do
     if(protocol == "pStart") then
         print("You got it boss. Starting up the job.")
         hub.startWork()
-    elseif(protocol == "pStop") then
-        print("Whatever you say bud. Stopping all turt action.")
-        hub.stopWork()
-    elseif(protocol == "pStatus") then
-        print("Here's the sitrep:")
-        hub.getStatus()
     else
         print("Unkown protocol: "..protocol)
     end
 end
-
--- Register for turts is not saving
