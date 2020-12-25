@@ -1,0 +1,12 @@
+{
+    "Turt1": {
+        "id": 1,
+        "label": "Turt1",
+        "status": "mining"
+    },
+    "Turt2": {
+        "id": 2,
+        "label": "Turt2",
+        "status": "mining"
+    }
+}

@@ -1,12 +1,12 @@
 os.setComputerLabel("Hub")
+local label = os.getComputerLabel()
 local hub = require("/lushTurts/apis/hub")
 
 rednet.open("top")
-
--- Add in host so we can use lookup on "hub" to dynamically grab the hub computer ID rather than manually entering
+host("hub", label)
 
 while true do
-    print("Waiting for orders...")
+    print("Waiting for orders or new Turtles to register.")
     local senderID, msg, protocol = rednet.receive()
 
     if(protocol == "pStart") then
@@ -18,7 +18,15 @@ while true do
     elseif(protocol == "pStatus") then
         print("Here's the sitrep.")
         hub.getStatus()
+    elseif(protocol == "reg") then
+        registerTurt(msg)
     else
         print("Unkown protocol: "..protocol)
     end
+end
+
+function registerTurt(turt)
+    local turtles = hub.getTurtles()
+    turtles[turt.label] = turt
+    hub.saveTurts(turtles)
 end
