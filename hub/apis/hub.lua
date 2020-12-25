@@ -80,7 +80,7 @@ end
 -- Add turtle to the turtle db
 function func.registerTurt(turt)
     local turtles = func.getTurtles()
-    turtles[turt.label] = turt
+    turtles[tostring(turt.id)] = turt
     func.saveTurtles(turtles)
 end
 
@@ -109,7 +109,7 @@ function func.startWork()
 		if(msg.status) then
 			print(msg.label.." is now registered.")
         	func.registerTurt(msg)
-		elseif(workStatus and (msg == "work")) then
+		elseif(msg == "work") then
 			local nextMine = getNextMine()
 			print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
 			rednet.send(senderID, nextMine, "mine")
@@ -118,7 +118,7 @@ function func.startWork()
 			getStatus()
 		elseif(msg == "stop") then
 			print("Whatever you say bud. Stopping all turt action.")
-			stopWork()
+			stopWork(senderID, msg)
 			break
 		else
 			print("Not sure what this is from "..senderID.."... Message: "..msg)
@@ -127,12 +127,11 @@ function func.startWork()
 	end
 end
 
-function stopWork()
+function stopWork(senderID, msg)
 	rednet.send(7, "Stopping work...", "hub")
 
 	while true do
 		local turtsDone = 0
-		local senderID, msg, protocol = rednet.receive("mine")
 		rednet.send(senderID, "stop", "mine")
 
 		local turtles = func.getTurtles()

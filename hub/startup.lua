@@ -12,7 +12,15 @@ while true do
     if(protocol == "pStart") then
         print("You got it boss. Starting up the job.")
         hub.startWork()
+    elseif(protocol == "dns")
+        print("A device pinged me ^_^")
     else
-        print("Unkown protocol: "..protocol)
+        print("Unknown protocol: "..protocol.." Message: "..msg)
+
+        if(type(msg) == "table") then
+            for key, value in pairs(msg) do
+                print(key..value)
+            end
+        end
     end
 end
