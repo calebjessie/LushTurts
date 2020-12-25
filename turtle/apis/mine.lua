@@ -86,7 +86,7 @@ function detectAndDig()
     while(turtle.detectUp()) do
         turtle.digUp()
     end
-    if(turtle.detectDown()) do
+    if(turtle.detectDown()) then
         turtle.digDown()
     end
 end

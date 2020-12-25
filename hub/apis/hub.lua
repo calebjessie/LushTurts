@@ -81,8 +81,8 @@ end
 function startTurts(msg, protocol)
 	local turtles = func.getTurtles()
 
-	for _, turt in turtles do
-		if(turt.status = "stopped") then
+	for key, turt in pairs(turtles) do
+		if(turt.status == "stopped") then
 			rednet.send(turt.id, msg, protocol)
 			turt.status = "mining"
 			func.saveTurtles(turtles)

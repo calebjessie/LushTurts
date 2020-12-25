@@ -3,10 +3,10 @@ local label = os.getComputerLabel()
 local hub = require("/lushTurts/apis/hub")
 
 rednet.open("top")
-host("hub", label)
+rednet.host("hub", label)
 
 while true do
-    print("Waiting for orders or new Turtles to register.")
+    print("Waiting for orders or new Turtles to register or request work.")
     local senderID, msg, protocol = rednet.receive()
 
     if(protocol == "pStart") then
@@ -30,3 +30,6 @@ function registerTurt(turt)
     turtles[turt.label] = turt
     hub.saveTurts(turtles)
 end
+
+-- Register for turts is not saving
+-- Turt is starting to mine right away rather than going to assigned chunk? wtf
