@@ -77,6 +77,13 @@ function func.saveTurtles(turtles)
 	turtFile:close()
 end
 
+-- Add turtle to the turtle db
+function func.registerTurt(turt)
+    local turtles = func.getTurtles()
+    turtles[turt.label] = turt
+    func.saveTurtles(turtles)
+end
+
 -- Send message to all turtles with the "stopped" status to resume mining
 function startTurts(msg, protocol)
 	local turtles = func.getTurtles()

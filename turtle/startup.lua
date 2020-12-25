@@ -23,8 +23,8 @@ while true do
     print("Message received father...")
 
     if(msg ~= "stop") then
-        print("Moving to the next chunk at x: "..coords.x..", y: "..coords.y..", z: "..coords.z)
-        mine.moveToChunk(coords)
+        print("Moving to the next chunk at x: "..msg.x..", y: "..msg.y..", z: "..msg.z)
+        mine.moveToChunk(msg)
     else
         local senderID, msg, protocol = rednet.receive("resumeMine")
         os.sleep(1)

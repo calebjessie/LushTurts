@@ -1,21 +1,22 @@
 local arg = string.lower(arg[1])
+local hub = rednet.lookup("hub", "Hub")
 
 rednet.open("back")
 
 function start()
-    rednet.send(9, "start", "pStart")
+    rednet.send(hub, "start", "pStart")
     local id, msg, protocol = rednet.receive("hub")
     print(msg)
 end
 
 function stop()
-    rednet.send(9, "stop", "pStop")
+    rednet.send(hub, "stop", "pStop")
     local id, msg, protocol = rednet.receive("hub")
     print(msg)
 end
 
 function status()
-    rednet.send(9, "status", "pStatus")
+    rednet.send(hub, "status", "pStatus")
     local id, msg, protocol = rednet.receive("hub")
     print("Need to figure out how to display turtle stats")
 end

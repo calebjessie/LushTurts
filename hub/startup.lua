@@ -19,17 +19,11 @@ while true do
         print("Here's the sitrep.")
         hub.getStatus()
     elseif(protocol == "reg") then
-        registerTurt(msg)
+        print(msg.label.." is now registered.")
+        hub.registerTurt(msg)
     else
         print("Unkown protocol: "..protocol)
     end
 end
 
-function registerTurt(turt)
-    local turtles = hub.getTurtles()
-    turtles[turt.label] = turt
-    hub.saveTurts(turtles)
-end
-
 -- Register for turts is not saving
--- Turt is starting to mine right away rather than going to assigned chunk? wtf
