@@ -15,7 +15,7 @@ while true do
     elseif(protocol == "dns") then
         print("A device pinged me ^_^")
     else
-        print("Unknown protocol: "..protocol.." Message: "..msg)
+        print("Unknown protocol: "..protocol.." Message: "..tostring(msg))
 
         if(type(msg) == "table") then
             for key, value in pairs(msg) do

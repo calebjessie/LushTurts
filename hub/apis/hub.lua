@@ -118,7 +118,7 @@ function func.startWork()
 			getStatus()
 		elseif(msg == "stop") then
 			print("Whatever you say bud. Stopping all turt action.")
-			stopWork(senderID, msg)
+			stopWork()
 			break
 		else
 			print("Not sure what this is from "..senderID.."... Message: "..msg)
@@ -127,15 +127,16 @@ function func.startWork()
 	end
 end
 
-function stopWork(senderID, msg)
+function stopWork()
 	rednet.send(7, "Stopping work...", "hub")
 
 	while true do
 		local turtsDone = 0
+		local senderID, msg, protocol = rednet.receive("mine")
 		rednet.send(senderID, "stop", "mine")
 
 		local turtles = func.getTurtles()
-		turtles.senderID.status = "stopped"
+		turtles.senderID.status = "stopped" -- senderID nil?
 		func.saveTurtles(turtles)
 
 		for key, turt in pairs(turtles) do
