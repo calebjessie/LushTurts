@@ -3,6 +3,8 @@ local config = require("/lushTurts/data/config")
 local tracking = require("/lushTurts/apis/tracking")
 local func = { }
 
+local hubID = rednet.lookup("hub", "Hub")
+
 function dropItems()
   print("Looking for garbo to drop")
   for slot = 1, config.SLOT_COUNT do
