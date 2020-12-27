@@ -1,5 +1,5 @@
-local arg = string.lower(arg[1])
 local hub = rednet.lookup("hub", "Hub")
+local arg = string.lower(arg[1])
 
 rednet.open("back")
 

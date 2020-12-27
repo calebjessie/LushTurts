@@ -97,6 +97,19 @@ function startTurts(msg, protocol)
 	end
 end
 
+-- Set status of a turtle
+function setStatus(id, nStatus)
+	local turtles = func.getTurtles()
+
+	for key, turt in pairs(turtles) do
+		if(turt.id == id) then
+			turt.status = nStatus
+		end
+	end
+
+	func.saveTurtles(turtles)
+end
+
 function func.startWork()
 	rednet.send(7, "Starting work...", "hub")
 
@@ -123,14 +136,7 @@ function func.startWork()
 		elseif(msg == "fuel") then
 			local turtles = func.getTurtles()
 			print(senderID.." is out of fuel")
-
-			for key, turt in pairs(turtles) do
-				if(turt.id == senderID) then
-					turt.status = "out of fuel"
-				end
-			end
-
-			func.saveTurtles(turtles)
+			setStatus(senderID, "out of fuel")
 		else
 			print("Not sure what this is from "..senderID.."... Message: "..msg)
 			print("Just gonna wait for another message...")
@@ -143,18 +149,11 @@ function stopWork()
 
 	while true do
 		local turtsDone = 0
+		local turtles = getTurtles()
 		local senderID, msg, protocol = rednet.receive("mine")
 		rednet.send(senderID, "stop", "mine")
 
-		local turtles = func.getTurtles()
-
-		for key, turt in pairs(turtles) do
-			if(turt.id == senderID) then
-				turt.status = "stopped"
-			end
-		end
-
-		func.saveTurtles(turtles)
+		setStatus(senderID, "stopped")
 
 		for key, turt in pairs(turtles) do
 			if(turt.status == "stopped") then

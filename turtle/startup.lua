@@ -17,7 +17,7 @@ tracking.initCoords()
 
 -- Send request for new chunk to mine. If msg is stop, then we wait for hub to resume work
 while true do
-    if(turtle.getFuelLevel == 0) then
+    if(turtle.getFuelLevel() == 0) then
         rednet.send(hub, "fuel", "mine")
         break
     else 
