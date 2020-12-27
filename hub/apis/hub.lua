@@ -149,7 +149,7 @@ function stopWork()
 
 	while true do
 		local turtsDone = 0
-		local turtles = getTurtles()
+		local turtles = func.getTurtles()
 		local senderID, msg, protocol = rednet.receive("mine")
 		rednet.send(senderID, "stop", "mine")
 
@@ -167,6 +167,7 @@ function stopWork()
 	end
 end
 
+-- Get the status of all turtles and send to a pocket computer
 function getStatus()
 	-- Under construction
 	rednet.send(7, "Sending status...", "hub")

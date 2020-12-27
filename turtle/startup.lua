@@ -1,7 +1,7 @@
 local mine = require("/lushTurts/apis/mine")
 local tracking = require("/lushTurts/apis/tracking")
 local turtLabel = os.getComputerLabel()
-local turtle = {
+local turtleObj = {
     id = os.getComputerID(),
     label = turtLabel,
     status = "mining"
@@ -10,7 +10,7 @@ rednet.open("left")
 local hubID = rednet.lookup("hub", "Hub")
 
 -- Register turtle with the hub
-rednet.send(hubID, turtle, "mine")
+rednet.send(hubID, turtleObj, "mine")
 
 -- Get initial location of turtle
 tracking.initCoords()
