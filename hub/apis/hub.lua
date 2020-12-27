@@ -136,7 +136,7 @@ function stopWork()
 		rednet.send(senderID, "stop", "mine")
 
 		local turtles = func.getTurtles()
-		turtles.senderID.status = "stopped" -- senderID nil?
+		turtles.[senderID].status = "stopped"
 		func.saveTurtles(turtles)
 
 		for key, turt in pairs(turtles) do
