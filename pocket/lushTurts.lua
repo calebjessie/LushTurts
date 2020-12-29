@@ -18,7 +18,14 @@ end
 function status()
     rednet.send(hub, "status", "pStatus")
     local id, msg, protocol = rednet.receive("hub")
-    print("Need to figure out how to display turtle stats")
+    
+    for key, turt in pairs(msg) do
+        print(turt.label.." - "..turt.status)
+    end
+end
+
+function formatStatus()
+
 end
 
 if(arg == "start") then

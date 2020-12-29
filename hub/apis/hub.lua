@@ -127,7 +127,6 @@ function func.startWork()
 			print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
 			rednet.send(senderID, nextMine, "mine")
 		elseif(msg == "status") then
-			print("Here's the sitrep:")
 			getStatus()
 		elseif(msg == "stop") then
 			print("Whatever you say bud. Stopping all turt action.")
@@ -151,27 +150,31 @@ function stopWork()
 		local turtsDone = 0
 		local turtles = func.getTurtles()
 		local senderID, msg, protocol = rednet.receive("mine")
-		rednet.send(senderID, "stop", "mine")
 
-		setStatus(senderID, "stopped")
+		if(protocol == "pStatus") then
+			func.getStatus() -- Is it possible to send an additional message to let us know we're in the process of stopping?
+		else
+			rednet.send(senderID, "stop", "mine")
 
-		for key, turt in pairs(turtles) do
-			if(turt.status == "stopped") then
-				turtsDone = turtsDone + 1
+			setStatus(senderID, "stopped")
+
+			for key, turt in pairs(turtles) do
+				if(turt.status == "stopped") then
+					turtsDone = turtsDone + 1
+				end
 			end
-		end
 
-		if(turtsDone == #turtles) then
-			break
+			if(turtsDone == #turtles) then
+				break
+			end
 		end
 	end
 end
 
 -- Get the status of all turtles and send to a pocket computer
-function getStatus()
-	-- Under construction
-	rednet.send(7, "Sending status...", "hub")
-	
+function func.getStatus()
+	local turts = func.getTurtles()
+	rednet.send(7, turts, "hub")
 end
 
 return func
