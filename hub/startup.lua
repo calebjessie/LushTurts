@@ -14,7 +14,7 @@ while true do
         hub.startWork()
     elseif(protocol == "dns") then
         print("A device pinged me ^_^")
-    elseif(protocol == "pStatus") then
+    elseif(msg == "status") then
        hub.getStatus()
     else
         print("Unknown protocol: "..protocol.." Message: "..tostring(msg))

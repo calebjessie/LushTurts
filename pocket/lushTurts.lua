@@ -16,7 +16,7 @@ function stop()
 end
 
 function status()
-    rednet.send(hub, "status", "pStatus")
+    rednet.send(hub, "status", "mine")
     local id, msg, protocol = rednet.receive("hub")
     
     for key, turt in pairs(msg) do
