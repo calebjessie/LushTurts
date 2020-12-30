@@ -1,9 +1,12 @@
 os.setComputerLabel("Hub")
 local label = os.getComputerLabel()
 local hub = require("/lushTurts/apis/hub")
+local monitor = require("/lushTurts/apis/monitor")
 
 rednet.open("top")
 rednet.host("hub", label)
+
+monitor.initDisplay()
 
 while true do
     print("Waiting for orders from the homie...")
