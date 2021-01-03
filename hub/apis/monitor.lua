@@ -6,42 +6,31 @@ local monitor = peripheral.find("monitor")
 term.redirect(monitor)
 monitor.setTextScale(.5)
 
-local width, height = monitor.getSize()
+func.width, func.height = monitor.getSize()
 local padding = 2
 local page, sCount, eCount = 1, 1, 11
 
 function func.initDisplay()
     monitor.clear()
+    local headerImg = surface.load("/lushTurts/images/header")
+    local hSurf = surface.create(func.width, 9)
+    hSurf:drawSurface(headerImg, 0, 0)
 
-    while true do
-        local headerImg = surface.load("/lushTurts/images/header")
-        local hSurf = surface.create(width, 9)
-        hSurf:drawSurface(headerImg, 0, 0)
+    local sSurf = surface.create(func.width, func.height)
 
-        local sSurf = surface.create(width, height)
+    local upBtn = surface.load("/lushTurts/images/up-btn")
+    local downBtn = surface.load("/lushTurts/images/down-btn")
+    sSurf:drawSurface(upBtn, math.ceil(func.width/2) - 19, 9)
+    sSurf:drawSurface(downBtn, math.ceil(func.width/2) - 19, func.height - 3)
+    drawStatus(sSurf)
 
-        local upBtn = surface.load("/lushTurts/images/up-btn")
-        local downBtn = surface.load("/lushTurts/images/down-btn")
-        sSurf:drawSurface(upBtn, math.ceil(width/2) + 1, 9)
-        sSurf:drawSurface(downBtn, math.ceil(width/2) + 1, height - 3)
-        drawStatus(sSurf)
-
-        sSurf:output()
-        hSurf:output()
-
-        local event, side, x, y = os.pullEvent("monitor_touch")
-
-        if((x >= 42) and (y <= 12) and (y >= 10)) then
-            prevPage()
-        elseif((x >= 42) and (y <= 38) and (y >= 36)) then
-            nextPage()
-        end
-    end
+    sSurf:output()
+    hSurf:output()
 end
 
 function createHeader()
     local headerImg = surface.load("/lushTurts/images/header")
-    local hSurf = surface.create(width, 8)
+    local hSurf = surface.create(func.width, 8)
     hSurf:drawSurface(headerImg, 0, 0)
     hSurf:output()
 end
@@ -54,15 +43,20 @@ function drawStatus(surf)
         local loc = tostring("("..math.floor(turt.loc.x))..","..tostring(math.floor(turt.loc.y))..","..tostring(math.floor(turt.loc.z)..")")
 
         if((turt.id >= sCount) and (turt.id <= eCount)) then
-            surf:drawString(tostring(turt.label), math.ceil(width/2) + 3, (i * padding) + 11, colors.black, colors.white)
-            surf:drawString(tostring(loc), math.ceil(width/2) + 11, (i * padding) + 11, colors.black, colors.white)
-            surf:drawString(tostring(turt.status), math.ceil(width/2) + 26, (i * padding) + 11, colors.black, colors.white)
+            if(turt.status == "Stopped" or turt.status == "Out of fuel") then
+                surf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.red)
+            else
+                surf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.green)
+            end
+            surf:drawString(tostring(turt.label), math.ceil(func.width/2) - 24, (i * padding) + 11, colors.black, colors.white)
+            surf:drawString(tostring(turt.status), math.ceil(func.width/2) - 2, (i * padding) + 11, colors.black, colors.white)
+            surf:drawString(tostring(loc), math.ceil(func.width/2) + 13, (i * padding) + 11, colors.black, colors.white)
             i = i + 1
         end
     end
 end
 
-function nextPage()
+function func.nextPage()
     local turtles = hub.getTurtles()
 
     if(math.ceil(#turtles/11) == page) then
@@ -76,7 +70,7 @@ function nextPage()
     end
 end
 
-function prevPage()
+function func.prevPage()
     local turtles = hub.getTurtles()
 
     if(page == 1) then

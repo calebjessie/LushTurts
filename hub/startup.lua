@@ -6,30 +6,24 @@ local monitor = require("/lushTurts/apis/monitor")
 rednet.open("top")
 rednet.host("hub", label)
 
--- Need to add os.pullEvent() and use if statement to detect if rednet msg or monitor touch
--- then the rednet.receive below becomes redundant bc we can detect through pullEvent() which will still return senderID, msg, and protocol
--- The next thing would be to do the same within the startWork() function
-
 monitor.initDisplay()
 
 while true do
-    print("Waiting for orders from the homie...")
-    local senderID, msg, protocol = rednet.receive()
+    local event, param1, param2, param3 = os.pullEvent()
 
-    if(protocol == "pStart") then
-        print("You got it boss. Starting up the job.")
-        hub.startWork()
-    elseif(protocol == "dns") then
-        print("A device pinged me ^_^")
-    elseif(msg == "status") then
-       hub.getStatus()
-    else
-        print("Unknown protocol: "..protocol.." Message: "..tostring(msg))
-
-        if(type(msg) == "table") then
-            for key, value in pairs(msg) do
-                print(key..value)
-            end
+    if (event == "rednet_message") then
+        if(param3 == "pStart") then
+            hub.startWork()
+        elseif(param2 == "status") then
+            hub.getStatus()
+        end
+    elseif (event == "monitor_touch") then
+        if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
+            monitor.prevPage()
+            monitor.initDisplay()
+        elseif((param2 >= math.ceil(monitor.width/2) - 19)  and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 38) and (param3 >= 36)) then
+            monitor.nextPage()
+            monitor.initDisplay()
         end
     end
 end
