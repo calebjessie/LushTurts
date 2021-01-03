@@ -64,8 +64,12 @@ function func.getTurtles()
 	turtFile:close()
 
 	turts = json.decode(turtJson)
+	
+	for key, turtle in pairs(turts) do
+		newTurts[turtle.id] = turtle
+	end
 
-	return turts
+	return newTurts
 end
 
 -- Save database of all turtles registered
@@ -116,7 +120,7 @@ function func.startWork()
 	startTurts("start", "resumeMine")
 
 	while true do
-		print("Waiting for orders, new Turtles to register or request work.")
+		print("Waiting for orders, new Turtles to\nregister or request work.")
 		local senderID, msg, protocol = rednet.receive("mine")
 
 		if(msg.status) then
@@ -124,13 +128,13 @@ function func.startWork()
         	func.registerTurt(msg)
 		elseif(msg == "work") then
 			local nextMine = getNextMine()
-			print("Good. Next mine for you child is: ".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
+			print("Good. Next mine for you child is: \n".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
 			rednet.send(senderID, nextMine, "mine")
 		elseif(msg == "status") then
 			print("Sending the status of all turts.")
 			func.getStatus()
 		elseif(msg == "stop") then
-			print("Whatever you say bud. Stopping all turt action.")
+			print("Whatever you say bud.\nStopping all turt action.")
 			stopWork()
 			break
 		elseif(msg == "fuel") then
@@ -138,7 +142,7 @@ function func.startWork()
 			print(senderID.." is out of fuel")
 			setStatus(senderID, "out of fuel")
 		else
-			print("Not sure what this is from "..senderID.."... Message: "..msg)
+			print("Not sure what this is. \nSender:"..senderID.." Message: "..msg)
 			print("Just gonna wait for another message...")
 		end
 	end
@@ -153,7 +157,7 @@ function stopWork()
 		local senderID, msg, protocol = rednet.receive("mine")
 
 		if(msg == "status") then
-			func.getStatus() -- Is it possible to send an additional message to let us know we're in the process of stopping?
+			func.getStatus()
 		else
 			rednet.send(senderID, "stop", "mine")
 

@@ -6,6 +6,10 @@ local monitor = require("/lushTurts/apis/monitor")
 rednet.open("top")
 rednet.host("hub", label)
 
+-- Need to add os.pullEvent() and use if statement to detect if rednet msg or monitor touch
+-- then the rednet.receive below becomes redundant bc we can detect through pullEvent() which will still return senderID, msg, and protocol
+-- The next thing would be to do the same within the startWork() function
+
 monitor.initDisplay()
 
 while true do

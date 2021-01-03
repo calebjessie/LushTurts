@@ -7,7 +7,6 @@ config.DROPPED_ITEMS = {
     "minecraft:cobblestone",
     "minecraft:sand",
     "minecraft:gravel",
-    "minecraft:redstone",
     "minecraft:flint",
     "railcraft:ore_metal",
     "extrautils2:ingredients",
