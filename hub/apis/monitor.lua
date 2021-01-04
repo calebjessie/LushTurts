@@ -1,6 +1,6 @@
 local func = { }
 local surface = require("/lushTurts/apis/surface")
-local hub = require("/lushTurts/apis/hub")
+local turtFile = require("/lushTurts/apis/turtFile")
 local monitor = peripheral.find("monitor")
 
 term.redirect(monitor)
@@ -25,7 +25,7 @@ end
 
 function func.drawStatus()
     sSurf:clear(colors.black)
-    local turtles = hub.getTurtles()
+    local turtles = turtFile.getTurtles()
     local i = 1
 
     local upBtn = surface.load("/lushTurts/images/up-btn")
@@ -51,7 +51,7 @@ function func.drawStatus()
 end
 
 function func.nextPage()
-    local turtles = hub.getTurtles()
+    local turtles = turtFile.getTurtles()
 
     if(math.ceil(#turtles/11) == page) then
         page = 1
@@ -62,10 +62,12 @@ function func.nextPage()
         sCount = sCount + 11
         eCount = eCount + 11
     end
+
+    func.drawStatus()
 end
 
 function func.prevPage()
-    local turtles = hub.getTurtles()
+    local turtles = turtFile.getTurtles()
 
     if(page == 1) then
         page = math.ceil(#turtles/11)
@@ -76,6 +78,8 @@ function func.prevPage()
         sCount = sCount - 11
         eCount = eCount - 11
     end
+
+    func.drawStatus()
 end
 
 return func

@@ -1,6 +1,7 @@
 local func = { }
 local json = require("/lushTurts/apis/json")
 local monitor = require("/lushTurts/apis/monitor")
+local turtFile = require("/lushTurts/apis/turtFile")
 
 local nextMine = {
 	loc = {x,y,z},
@@ -58,53 +59,54 @@ function getNextMine()
 end
 
 -- Retrieve list of current turtles registered to hub
-function func.getTurtles()
-	local turts = {}
-	local turtFile = io.open("/lushTurts/data/turts.json", "r")
-	local turtJson = turtFile:read("a")
-	turtFile:close()
+-- function func.getTurtles()
+-- 	local turts = {}
+-- 	local newTurts = {}
+-- 	local turtFile = io.open("/lushTurts/data/turts.json", "r")
+-- 	local turtJson = turtFile:read("a")
+-- 	turtFile:close()
 
-	turts = json.decode(turtJson)
+-- 	turts = json.decode(turtJson)
 	
-	for key, turtle in pairs(turts) do
-		newTurts[turtle.id] = turtle
-	end
+-- 	for key, turtle in pairs(turts) do
+-- 		newTurts[turtle.id] = turtle
+-- 	end
 
-	return newTurts
-end
+-- 	return newTurts
+-- end
 
 -- Save database of all turtles registered
-function func.saveTurtles(turtles)
-	local turtJson
-	local turtFile = io.open("/lushTurts/data/turts.json", "w+")
-	turtJson = json.encode(turtles)
-	turtFile:write(turtJson)
-	turtFile:close()
-end
+-- function func.saveTurtles(turtles)
+-- 	local turtJson
+-- 	local turtFile = io.open("/lushTurts/data/turts.json", "w+")
+-- 	turtJson = json.encode(turtles)
+-- 	turtFile:write(turtJson)
+-- 	turtFile:close()
+-- end
 
 -- Add turtle to the turtle db
 function func.registerTurt(turt)
-    local turtles = func.getTurtles()
+    local turtles = turtFile.getTurtles()
     turtles[tostring(turt.id)] = turt
-    func.saveTurtles(turtles)
+    turtFile.saveTurtles(turtles)
 end
 
 -- Send message to all turtles with the "stopped" status to resume mining
 function startTurts(msg, protocol)
-	local turtles = func.getTurtles()
+	local turtles = turtFile.getTurtles()
 
 	for key, turt in pairs(turtles) do
 		if(turt.status == "Stopped") then
 			rednet.send(turt.id, msg, protocol)
 			turt.status = "Mining"
-			func.saveTurtles(turtles)
+			turtFile.saveTurtles(turtles)
 		end
 	end
 end
 
 -- Set status of a turtle
 function setStatus(id, nStatus)
-	local turtles = func.getTurtles()
+	local turtles = turtFile.getTurtles()
 
 	for key, turt in pairs(turtles) do
 		if(turt.id == id) then
@@ -112,7 +114,7 @@ function setStatus(id, nStatus)
 		end
 	end
 
-	func.saveTurtles(turtles)
+	turtFile.saveTurtles(turtles)
 	monitor.drawStatus()
 end
 
@@ -138,8 +140,8 @@ function func.startWork()
 				stopWork()
 				break
 			elseif(param2 == "fuel") then
-				local turtles = func.getTurtles()
-				setStatus(param1, "out of fuel")
+				local turtles = turtFile.getTurtles()
+				setStatus(param1, "Out of fuel")
 			end
 		elseif (event == "monitor_touch") then
 			if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
@@ -158,7 +160,7 @@ function stopWork()
 
 	while true do
 		local turtsDone = 0
-		local turtles = func.getTurtles()
+		local turtles = turtFile.getTurtles()
 		local event, param1, param2, param3 = os.pullEvent()
 
 		if (event == "rednet_message") then
@@ -181,10 +183,8 @@ function stopWork()
 		elseif (event == "monitor_touch") then
 			if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
 				monitor.prevPage()
-				monitor.initDisplay()
 			elseif((param2 >= math.ceil(monitor.width/2) - 19)  and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 38) and (param3 >= 36)) then
 				monitor.nextPage()
-				monitor.initDisplay()
 			end
 		end
 	end
@@ -192,7 +192,7 @@ end
 
 -- Get the status of all turtles and send to a pocket computer
 function func.getStatus()
-	local turts = func.getTurtles()
+	local turts = turtFile.getTurtles()
 	rednet.send(7, turts, "hub")
 end
 

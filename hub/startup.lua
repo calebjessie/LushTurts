@@ -20,10 +20,8 @@ while true do
     elseif (event == "monitor_touch") then
         if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
             monitor.prevPage()
-            monitor.initDisplay()
         elseif((param2 >= math.ceil(monitor.width/2) - 19)  and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 38) and (param3 >= 36)) then
             monitor.nextPage()
-            monitor.initDisplay()
         end
     end
 end
