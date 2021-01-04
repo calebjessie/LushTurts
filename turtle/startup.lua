@@ -4,16 +4,24 @@ local turtLabel = os.getComputerLabel()
 local turtleObj = {
     id = os.getComputerID(),
     label = turtLabel,
-    status = "mining"
+    status = "mining",
+    loc = {
+        x = 0,
+        y = 0,
+        z = 0
+    }
 }
 rednet.open("left")
 local hubID = rednet.lookup("hub", "Hub")
 
+-- Get initial location of turtle
+local initLoc = tracking.initCoords()
+turtleObj.loc.x = initLoc.x
+turtleObj.loc.y = initLoc.y
+turtleObj.loc.z = initLoc.z
+
 -- Register turtle with the hub
 rednet.send(hubID, turtleObj, "mine")
-
--- Get initial location of turtle
-tracking.initCoords()
 
 -- Send request for new chunk to mine. If msg is stop, then we wait for hub to resume work
 while true do

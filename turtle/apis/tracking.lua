@@ -36,6 +36,8 @@ function func.initCoords()
         turtLoc.cardinal = findCard()
         saveLoc()
     end
+
+    return turtLoc.coords
 end
 
 -- Find the cardinal direction the turtle is facing

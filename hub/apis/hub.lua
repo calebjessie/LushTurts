@@ -58,32 +58,6 @@ function getNextMine()
 	return usMine.loc
 end
 
--- Retrieve list of current turtles registered to hub
--- function func.getTurtles()
--- 	local turts = {}
--- 	local newTurts = {}
--- 	local turtFile = io.open("/lushTurts/data/turts.json", "r")
--- 	local turtJson = turtFile:read("a")
--- 	turtFile:close()
-
--- 	turts = json.decode(turtJson)
-	
--- 	for key, turtle in pairs(turts) do
--- 		newTurts[turtle.id] = turtle
--- 	end
-
--- 	return newTurts
--- end
-
--- Save database of all turtles registered
--- function func.saveTurtles(turtles)
--- 	local turtJson
--- 	local turtFile = io.open("/lushTurts/data/turts.json", "w+")
--- 	turtJson = json.encode(turtles)
--- 	turtFile:write(turtJson)
--- 	turtFile:close()
--- end
-
 -- Add turtle to the turtle db
 function func.registerTurt(turt)
     local turtles = turtFile.getTurtles()
