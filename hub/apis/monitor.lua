@@ -33,20 +33,25 @@ function func.drawStatus()
     sSurf:drawSurface(upBtn, math.ceil(func.width/2) - 19, 9)
     sSurf:drawSurface(downBtn, math.ceil(func.width/2) - 19, func.height - 3)
 
-    for key, turt in pairs(turtles) do
-        local loc = tostring("("..math.floor(turt.loc.x))..","..tostring(math.floor(turt.loc.y))..","..tostring(math.floor(turt.loc.z)..")")
+    if (#turtles ~= 0) then
+        for key, turt in pairs(turtles) do
+            local loc = tostring("("..math.floor(turt.loc.x))..","..tostring(math.floor(turt.loc.y))..","..tostring(math.floor(turt.loc.z)..")")
 
-        if((turt.id >= sCount) and (turt.id <= eCount)) then
-            if(turt.status == "Stopped" or turt.status == "Out of fuel") then
-                sSurf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.red)
-            else
-                sSurf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.green)
+            if((turt.id >= sCount) and (turt.id <= eCount)) then
+                if(turt.status == "Stopped" or turt.status == "Out of fuel") then
+                    sSurf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.red)
+                else
+                    sSurf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.green)
+                end
+                sSurf:drawString(tostring(turt.label), math.ceil(func.width/2) - 24, (i * padding) + 11, colors.black, colors.white)
+                sSurf:drawString(tostring(turt.status), math.ceil(func.width/2) - 2, (i * padding) + 11, colors.black, colors.white)
+                sSurf:drawString(tostring(loc), math.ceil(func.width/2) + 13, (i * padding) + 11, colors.black, colors.white)
+                i = i + 1
             end
-            sSurf:drawString(tostring(turt.label), math.ceil(func.width/2) - 24, (i * padding) + 11, colors.black, colors.white)
-            sSurf:drawString(tostring(turt.status), math.ceil(func.width/2) - 2, (i * padding) + 11, colors.black, colors.white)
-            sSurf:drawString(tostring(loc), math.ceil(func.width/2) + 13, (i * padding) + 11, colors.black, colors.white)
-            i = i + 1
         end
+    else
+        local emptyText = "Add your first turtle to get started."
+        sSurf:drawString(emptyText, math.ceil(func.width/2) - math.ceil(string.len(emptyText) - (string.len(emptyText)/2)), (func.height/2) + 3, colors.black, colors.white)
     end
 end
 
