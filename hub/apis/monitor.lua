@@ -9,6 +9,7 @@ monitor.setTextScale(.5)
 func.width, func.height = monitor.getSize()
 local padding = 2
 local page, sCount, eCount = 1, 1, 11
+local sSurf = surface.create(func.width, func.height)
 
 function func.initDisplay()
     monitor.clear()
@@ -16,41 +17,34 @@ function func.initDisplay()
     local hSurf = surface.create(func.width, 9)
     hSurf:drawSurface(headerImg, 0, 0)
 
-    local sSurf = surface.create(func.width, func.height)
-
-    local upBtn = surface.load("/lushTurts/images/up-btn")
-    local downBtn = surface.load("/lushTurts/images/down-btn")
-    sSurf:drawSurface(upBtn, math.ceil(func.width/2) - 19, 9)
-    sSurf:drawSurface(downBtn, math.ceil(func.width/2) - 19, func.height - 3)
-    drawStatus(sSurf)
+    func.drawStatus()
 
     sSurf:output()
     hSurf:output()
 end
 
-function createHeader()
-    local headerImg = surface.load("/lushTurts/images/header")
-    local hSurf = surface.create(func.width, 8)
-    hSurf:drawSurface(headerImg, 0, 0)
-    hSurf:output()
-end
-
-function drawStatus(surf)
+function func.drawStatus()
+    sSurf:clear(colors.black)
     local turtles = hub.getTurtles()
     local i = 1
+
+    local upBtn = surface.load("/lushTurts/images/up-btn")
+    local downBtn = surface.load("/lushTurts/images/down-btn")
+    sSurf:drawSurface(upBtn, math.ceil(func.width/2) - 19, 9)
+    sSurf:drawSurface(downBtn, math.ceil(func.width/2) - 19, func.height - 3)
 
     for key, turt in pairs(turtles) do
         local loc = tostring("("..math.floor(turt.loc.x))..","..tostring(math.floor(turt.loc.y))..","..tostring(math.floor(turt.loc.z)..")")
 
         if((turt.id >= sCount) and (turt.id <= eCount)) then
             if(turt.status == "Stopped" or turt.status == "Out of fuel") then
-                surf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.red)
+                sSurf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.red)
             else
-                surf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.green)
+                sSurf:fillRect(math.ceil(func.width/2 - 27), (i * padding) + 11, 2, 1, colors.green)
             end
-            surf:drawString(tostring(turt.label), math.ceil(func.width/2) - 24, (i * padding) + 11, colors.black, colors.white)
-            surf:drawString(tostring(turt.status), math.ceil(func.width/2) - 2, (i * padding) + 11, colors.black, colors.white)
-            surf:drawString(tostring(loc), math.ceil(func.width/2) + 13, (i * padding) + 11, colors.black, colors.white)
+            sSurf:drawString(tostring(turt.label), math.ceil(func.width/2) - 24, (i * padding) + 11, colors.black, colors.white)
+            sSurf:drawString(tostring(turt.status), math.ceil(func.width/2) - 2, (i * padding) + 11, colors.black, colors.white)
+            sSurf:drawString(tostring(loc), math.ceil(func.width/2) + 13, (i * padding) + 11, colors.black, colors.white)
             i = i + 1
         end
     end
@@ -82,10 +76,6 @@ function func.prevPage()
         sCount = sCount - 11
         eCount = eCount - 11
     end
-end
-
-function updateDisplay()
-
 end
 
 return func

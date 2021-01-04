@@ -1,7 +1,6 @@
+rednet.open("back")
 local hub = rednet.lookup("hub", "Hub")
 local arg = string.lower(arg[1])
-
-rednet.open("back")
 
 function start()
     rednet.send(hub, "start", "pStart")
@@ -18,14 +17,16 @@ end
 function status()
     rednet.send(hub, "status", "mine")
     local id, msg, protocol = rednet.receive("hub")
+
+    local turtTable = { }
     
     for key, turt in pairs(msg) do
-        print(turt.label.." - "..turt.status)
+        local turtStr = string.sub(turt.label, 1, 12).." - "..turt.status
+        table.insert(turtTable, turtStr)
     end
-end
 
-function formatStatus()
-
+    table.sort(turtTable)
+    textutils.pagedTabulate(turtTable)
 end
 
 if(arg == "start") then

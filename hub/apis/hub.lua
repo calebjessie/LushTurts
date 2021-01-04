@@ -1,5 +1,6 @@
 local func = { }
 local json = require("/lushTurts/apis/json")
+local monitor = require("/lushTurts/apis/monitor")
 
 local nextMine = {
 	loc = {x,y,z},
@@ -93,9 +94,9 @@ function startTurts(msg, protocol)
 	local turtles = func.getTurtles()
 
 	for key, turt in pairs(turtles) do
-		if(turt.status == "stopped") then
+		if(turt.status == "Stopped") then
 			rednet.send(turt.id, msg, protocol)
-			turt.status = "mining"
+			turt.status = "Mining"
 			func.saveTurtles(turtles)
 		end
 	end
@@ -112,6 +113,7 @@ function setStatus(id, nStatus)
 	end
 
 	func.saveTurtles(turtles)
+	monitor.drawStatus()
 end
 
 function func.startWork()
@@ -120,30 +122,33 @@ function func.startWork()
 	startTurts("start", "resumeMine")
 
 	while true do
-		print("Waiting for orders, new Turtles to\nregister or request work.")
-		local senderID, msg, protocol = rednet.receive("mine")
+		local event, param1, param2, param3 = os.pullEvent()
 
-		if(msg.status) then
-			print(msg.label.." is now registered.")
-        	func.registerTurt(msg)
-		elseif(msg == "work") then
-			local nextMine = getNextMine()
-			print("Good. Next mine for you child is: \n".."x: "..nextMine.x.." y: "..nextMine.y.." z: "..nextMine.z)
-			rednet.send(senderID, nextMine, "mine")
-		elseif(msg == "status") then
-			print("Sending the status of all turts.")
-			func.getStatus()
-		elseif(msg == "stop") then
-			print("Whatever you say bud.\nStopping all turt action.")
-			stopWork()
-			break
-		elseif(msg == "fuel") then
-			local turtles = func.getTurtles()
-			print(senderID.." is out of fuel")
-			setStatus(senderID, "out of fuel")
-		else
-			print("Not sure what this is. \nSender:"..senderID.." Message: "..msg)
-			print("Just gonna wait for another message...")
+		if (event == "rednet_message") then
+			if(param2.status) then
+				func.registerTurt(param2)
+				monitor.drawStatus()
+			elseif(param2 == "work") then
+				local nextMine = getNextMine()
+				rednet.send(param1, nextMine, "mine")
+				monitor.drawStatus()
+			elseif(param2 == "status") then
+				func.getStatus()
+			elseif(param2 == "stop") then
+				stopWork()
+				break
+			elseif(param2 == "fuel") then
+				local turtles = func.getTurtles()
+				setStatus(param1, "out of fuel")
+			end
+		elseif (event == "monitor_touch") then
+			if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
+				monitor.prevPage()
+				monitor.initDisplay()
+			elseif((param2 >= math.ceil(monitor.width/2) - 19)  and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 38) and (param3 >= 36)) then
+				monitor.nextPage()
+				monitor.initDisplay()
+			end
 		end
 	end
 end
@@ -154,23 +159,32 @@ function stopWork()
 	while true do
 		local turtsDone = 0
 		local turtles = func.getTurtles()
-		local senderID, msg, protocol = rednet.receive("mine")
+		local event, param1, param2, param3 = os.pullEvent()
 
-		if(msg == "status") then
-			func.getStatus()
-		else
-			rednet.send(senderID, "stop", "mine")
-
-			setStatus(senderID, "stopped")
-
-			for key, turt in pairs(turtles) do
-				if(turt.status == "stopped") then
-					turtsDone = turtsDone + 1
+		if (event == "rednet_message") then
+			if(param2 == "status") then
+				func.getStatus()
+			else
+				rednet.send(param1, "stop", "mine")
+				setStatus(param1, "Stopped")
+	
+				for key, turt in pairs(turtles) do
+					if(turt.status == "Stopped") then
+						turtsDone = turtsDone + 1
+					end
+				end
+	
+				if(turtsDone == #turtles) then
+					break
 				end
 			end
-
-			if(turtsDone == #turtles) then
-				break
+		elseif (event == "monitor_touch") then
+			if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
+				monitor.prevPage()
+				monitor.initDisplay()
+			elseif((param2 >= math.ceil(monitor.width/2) - 19)  and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 38) and (param3 >= 36)) then
+				monitor.nextPage()
+				monitor.initDisplay()
 			end
 		end
 	end

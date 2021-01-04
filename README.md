@@ -4,6 +4,8 @@ A simple chunk miner for turtles from CC: Tweaked.
 
 ## Todos
 * [ ] Update turtle status every rednet message maybe
+        Need to update when we set status or deliver chunk coords
+        In terms of the turtle location, updating every move would be dumb so we'll limit it to the assigned chunk
 * [ ] Dynamically generate turtle names on first boot
 * [ ] Rewrite nextMine() function for spiral
 * [ ] Possibly improve resolution of pixel art
