@@ -33,7 +33,9 @@ function func.drawStatus(surf)
     surf:drawSurface(downBtn, math.ceil(func.width/2) - 19, func.height - 3)
 
     if (#turtles ~= 0) then
-        for key, turt in pairs(turtles) do
+        local oTurts = turtFile.orderTurts(turtles)
+
+        for key, turt in pairs(oTurts) do
             local loc = tostring("("..math.floor(turt.loc.x))..","..tostring(math.floor(turt.loc.y))..","..tostring(math.floor(turt.loc.z)..")")
 
             if((turt.id >= sCount) and (turt.id <= eCount)) then

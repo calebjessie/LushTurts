@@ -4,18 +4,13 @@ local json = require("/lushTurts/apis/json")
 -- Retrieve list of current turtles registered to hub
 function func.getTurtles()
 	local turts = {}
-	local newTurts = {}
 	local turtFile = io.open("/lushTurts/data/turts.json", "r")
 	local turtJson = turtFile:read("a")
 	turtFile:close()
 
 	turts = json.decode(turtJson)
 	
-	for key, turtle in pairs(turts) do
-		newTurts[turtle.id] = turtle
-	end
-
-	return newTurts
+	return turts
 end
 
 function func.saveTurtles(turtles)
@@ -24,6 +19,16 @@ function func.saveTurtles(turtles)
 	turtJson = json.encode(turtles)
 	turtFile:write(turtJson)
 	turtFile:close()
+end
+
+function func.orderTurts(tObj)
+	local newTurts = {}
+
+	for key, turtle in pairs(tObj) do
+		newTurts[turtle.id] = turtle
+	end
+
+	return newTurts
 end
 
 return func
