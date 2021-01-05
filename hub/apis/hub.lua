@@ -134,6 +134,7 @@ function stopWork()
 	while true do
 		local turtsDone = 0
 		local turtles = turtFile.getTurtles()
+		local oTurts = turtFile.orderTurts(turtles)
 		local event, param1, param2, param3 = os.pullEvent()
 
 		if(event == "rednet_message") then
@@ -149,7 +150,7 @@ function stopWork()
 					end
 				end
 
-				if(turtsDone == #turtles) then
+				if(turtsDone == #oTurts) then
 					break
 				end
 			end
