@@ -100,13 +100,14 @@ function func.startWork()
 	while true do
 		local event, param1, param2, param3 = os.pullEvent()
 
-		if (event == "rednet_message") then
+		if(event == "rednet_message") then
 			if(param2.status) then
 				func.registerTurt(param2)
 				monitor.drawDisplay()
 			elseif(param2 == "work") then
 				local nextMine = getNextMine()
 				rednet.send(param1, nextMine, "mine")
+				updateTurtLoc(param1, nextMine)
 				monitor.drawDisplay()
 			elseif(param2 == "status") then
 				func.getStatus()
@@ -117,7 +118,7 @@ function func.startWork()
 				local turtles = turtFile.getTurtles()
 				setStatus(param1, "Out of fuel")
 			end
-		elseif (event == "monitor_touch") then
+		elseif(event == "monitor_touch") then
 			if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
 				monitor.prevPage()
 			elseif((param2 >= math.ceil(monitor.width/2) - 19)  and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 38) and (param3 >= 36)) then
@@ -135,7 +136,7 @@ function stopWork()
 		local turtles = turtFile.getTurtles()
 		local event, param1, param2, param3 = os.pullEvent()
 
-		if (event == "rednet_message") then
+		if(event == "rednet_message") then
 			if(param2 == "status") then
 				func.getStatus()
 			else
@@ -152,7 +153,7 @@ function stopWork()
 					break
 				end
 			end
-		elseif (event == "monitor_touch") then
+		elseif(event == "monitor_touch") then
 			if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
 				monitor.prevPage()
 			elseif((param2 >= math.ceil(monitor.width/2) - 19)  and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 38) and (param3 >= 36)) then
@@ -166,6 +167,21 @@ end
 function func.getStatus()
 	local turts = turtFile.getTurtles()
 	rednet.send(7, turts, "hub")
+end
+
+-- Update turtle location record
+function updateTurtLoc(sID, newLoc)
+	local turtles = turtFile.getTurtles()
+
+	for key, turt in pairs(turtles) do
+		if(turt.id == sID) then
+			turt.loc.x = newLoc.x
+			turt.loc.y = newLoc.y
+			turt.loc.z = newLoc.z
+		end
+	end
+
+	turtFile.saveTurtles(turtles)
 end
 
 return func
