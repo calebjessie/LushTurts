@@ -46,7 +46,7 @@ function getNextMine()
 	mineFile:close()
 
 	usMine = json.decode(mineJson)
-	
+
 	nextMine.loc.x = usMine.loc.x
 	nextMine.loc.y = usMine.loc.y
 	nextMine.loc.z = usMine.loc.z
@@ -89,7 +89,7 @@ function setStatus(id, nStatus)
 	end
 
 	turtFile.saveTurtles(turtles)
-	monitor.drawStatus()
+	monitor.drawDisplay()
 end
 
 function func.startWork()
@@ -103,11 +103,11 @@ function func.startWork()
 		if (event == "rednet_message") then
 			if(param2.status) then
 				func.registerTurt(param2)
-				monitor.drawStatus()
+				monitor.drawDisplay()
 			elseif(param2 == "work") then
 				local nextMine = getNextMine()
 				rednet.send(param1, nextMine, "mine")
-				monitor.drawStatus()
+				monitor.drawDisplay()
 			elseif(param2 == "status") then
 				func.getStatus()
 			elseif(param2 == "stop") then
@@ -120,10 +120,8 @@ function func.startWork()
 		elseif (event == "monitor_touch") then
 			if((param2 >= math.ceil(monitor.width/2) - 19) and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 12) and (param3 >= 10)) then
 				monitor.prevPage()
-				monitor.initDisplay()
 			elseif((param2 >= math.ceil(monitor.width/2) - 19)  and (param2 <= math.ceil(monitor.width/2) + 19) and (param3 <= 38) and (param3 >= 36)) then
 				monitor.nextPage()
-				monitor.initDisplay()
 			end
 		end
 	end
@@ -143,13 +141,13 @@ function stopWork()
 			else
 				rednet.send(param1, "stop", "mine")
 				setStatus(param1, "Stopped")
-	
+
 				for key, turt in pairs(turtles) do
 					if(turt.status == "Stopped") then
 						turtsDone = turtsDone + 1
 					end
 				end
-	
+
 				if(turtsDone == #turtles) then
 					break
 				end

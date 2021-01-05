@@ -6,7 +6,7 @@ local monitor = require("/lushTurts/apis/monitor")
 rednet.open("top")
 rednet.host("hub", label)
 
-monitor.initDisplay()
+monitor.drawDisplay()
 
 while true do
     local event, param1, param2, param3 = os.pullEvent()
