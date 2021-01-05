@@ -25,6 +25,7 @@ end
 function func.drawStatus(surf)
     surf:clear(colors.black)
     local turtles = turtFile.getTurtles()
+    local oTurts = turtFile.orderTurts(turtles)
     local i = 1
 
     local upBtn = surface.load("/lushTurts/images/up-btn")
@@ -32,9 +33,7 @@ function func.drawStatus(surf)
     surf:drawSurface(upBtn, math.ceil(func.width/2) - 19, 9)
     surf:drawSurface(downBtn, math.ceil(func.width/2) - 19, func.height - 3)
 
-    if (#turtles ~= 0) then
-        local oTurts = turtFile.orderTurts(turtles)
-
+    if (#oTurts ~= 0) then
         for key, turt in pairs(oTurts) do
             local loc = tostring("("..math.floor(turt.loc.x))..","..tostring(math.floor(turt.loc.y))..","..tostring(math.floor(turt.loc.z)..")")
 
