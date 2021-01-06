@@ -1,6 +1,24 @@
 local mine = require("/lushTurts/apis/mine")
 local tracking = require("/lushTurts/apis/tracking")
-local turtLabel = os.getComputerLabel()
+
+if(os.getComputerLabel() == nil) then
+    local request = http.get("https://raw.githubusercontent.com/calebjessie/LushTurts/master/names.txt")
+    local rNum = math.random(450)
+
+    for i = 1, 450 do
+      request.readLine()
+      if(i == rNum) then
+        local name = request.readLine()
+        os.setComputerLabel(name)
+        break
+      end
+    end
+
+    request.close()
+else
+    local turtLabel = os.getComputerLabel()
+end
+
 local turtleObj = {
     id = os.getComputerID(),
     label = turtLabel,
