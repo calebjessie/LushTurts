@@ -5,25 +5,28 @@ local turtFile = require("/lushTurts/apis/turtFile")
 
 local nextMine = {
 	loc = {x,y,z},
-	chunkRow,
-	chunkCol
+	segLength,
+	segPassed,
+	dx,
+	dz
 }
-local chunkRow, chunkCol
 local workStatus
 
 -- Calculate the next chunk to serve
 function positioning()
-	if(nextMine.chunkRow < 16 and nextMine.chunkCol == 16) then
-		nextMine.loc.x = nextMine.loc.x + 16
-		nextMine.chunkRow = nextMine.chunkRow + 1
-		nextMine.chunkCol = 1
-	elseif(nextMine.chunkCol < 16) then
-		if(nextMine.chunkRow % 2 == 1) then
-			nextMine.loc.z = nextMine.loc.z + 16
-			nextMine.chunkCol = nextMine.chunkCol + 1
-		else
-			nextMine.loc.z = nextMine.loc.z - 16
-			nextMine.chunkCol = nextMine.chunkCol + 1
+	nextMine.loc.x = nextMine.loc.x + nextMine.dx
+	nextMine.loc.z = nextMine.loc.z + nextMine.dz
+	nextMine.segPassed = nextMine.segPassed + 1
+	
+	if(nextMine.segPassed == nextMine.segLength) then
+		nextMine.segPassed = 0
+		
+		local buffer = nextMine.dx
+		nextMine.dx = -nextMine.dz
+		nextMine.dz = buffer
+		
+		if(nextMine.dz == 0) then
+			nextMine.segLength = nextMine.segLength + 1
 		end
 	end
 end
@@ -50,8 +53,10 @@ function getNextMine()
 	nextMine.loc.x = usMine.loc.x
 	nextMine.loc.y = usMine.loc.y
 	nextMine.loc.z = usMine.loc.z
-	nextMine.chunkRow = usMine.chunkRow
-	nextMine.chunkCol = usMine.chunkCol
+	nextMine.segLength = usMine.segLength
+	nextMine.segPassed = usMine.segPassed
+	nextMine.dx = usMine.dx
+	nextMine.dz = usMine.dz
 
 	saveNewCoords()
 

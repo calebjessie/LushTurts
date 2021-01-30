@@ -2,11 +2,6 @@
 
 A simple chunk miner for turtles from CC: Tweaked.
 
-## Todos
-* [ ] Dynamically generate turtle names on first boot
-* [ ] Rewrite nextMine() function for spiral
-* [ ] Possibly improve resolution of pixel art
-
 Dependencies:
 - [JSON api](http://www.computercraft.info/forums2/index.php?/topic/5854-json-api-v201-for-computercraft/), ElvishJerricco
 - [Simple github util](http://www.computercraft.info/forums2/index.php?/topic/29920-simple-github-util/), mayanyaa
