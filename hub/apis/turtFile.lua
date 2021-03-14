@@ -24,8 +24,10 @@ end
 function func.orderTurts(tObj)
 	local newTurts = {}
 
+	local i = 1
 	for key, turtle in pairs(tObj) do
-		newTurts[turtle.id] = turtle
+		newTurts[i] = turtle
+		i = i + 1
 	end
 
 	return newTurts

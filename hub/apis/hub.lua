@@ -66,7 +66,14 @@ end
 -- Add turtle to the turtle db
 function func.registerTurt(turt)
     local turtles = turtFile.getTurtles()
-    turtles[tostring(turt.id)] = turt
+
+	-- Get length of turtles and new id
+	local id = 0
+	for key, turt in pairs(turtles) do
+		id = id + 1
+	end
+
+    turtles[tostring(id)] = turt
     turtFile.saveTurtles(turtles)
 end
 
